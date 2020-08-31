@@ -9,11 +9,18 @@ public class GameInput : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Backspace))
             ReloadLevel();
+        else if (Input.GetKeyDown(KeyCode.Escape))
+            Exit();
     }
 
     void ReloadLevel()
     {
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(activeSceneIndex);
+    }
+
+    void Exit()
+    {
+        Application.Quit();
     }
 }
