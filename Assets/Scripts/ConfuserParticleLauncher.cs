@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleLauncher : MonoBehaviour
+public class ConfuserParticleLauncher : MonoBehaviour
 {
     ParticleSystem particleLauncher = null;
 
