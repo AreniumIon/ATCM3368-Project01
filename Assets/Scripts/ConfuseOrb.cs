@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ConfuseOrb : MonoBehaviour
 {
-    Rigidbody rb = null;
-    [SerializeField] ParticleSystem ps = null;
+    [SerializeField] ParticleSystem particles = null;
     [SerializeField] GameObject art = null;
 
     [Header("Projectile Variables")]
     [SerializeField] float velocity = 1f;
+    Vector3 velocityVector;
     [SerializeField] float lifespan = 3f;
     [SerializeField] float effectDuration = 5f;
 
@@ -17,14 +17,22 @@ public class ConfuseOrb : MonoBehaviour
 
     public void Start()
     {
+        /*
         rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * velocity;
+        */
+        velocityVector = Vector3.forward * velocity;
         DelayHelper.DelayAction(this, Despawn, lifespan);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Update()
     {
-        PlayerShip playerShip = collision.gameObject.GetComponent<PlayerShip>();
+        transform.Translate(velocityVector * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerShip playerShip = other.gameObject.GetComponent<PlayerShip>();
 
         if (!hasCollided && playerShip != null)
         {
@@ -38,9 +46,14 @@ public class ConfuseOrb : MonoBehaviour
 
     void Despawn()
     {
-        rb.Sleep();
-        Destroy(GetComponent<Collider>());
+        //visuals
         art.SetActive(false);
-        Destroy(gameObject, ps.main.startLifetime.constant);
+        //have to do an extra line to disable particles bc unity wants me to
+        ParticleSystem.EmissionModule emission = particles.emission;
+        emission.rateOverTime = 0f;
+        //disable collider
+        GetComponent<Collider>().enabled = false;
+        //will destroy self when particles are gone
+        Destroy(gameObject, particles.main.startLifetime.constant);
     }
 }

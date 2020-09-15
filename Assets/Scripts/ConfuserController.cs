@@ -20,8 +20,7 @@ public class ConfuserController : MonoBehaviour
     Rigidbody rb = null;
     Transform projectileParent = null;
     PlayerShip playerShip = null;
-    [SerializeField] GameObject art = null;
-    [SerializeField] LayerMask layerMask;
+    [SerializeField] LayerMask layerMask = new LayerMask();
     bool canFire = true; //cooldown for firing
 
     private void Awake()
@@ -46,7 +45,7 @@ public class ConfuserController : MonoBehaviour
     }
     
     //Used to toggle movement
-    bool IsPlayerNearby() { return Vector3.Distance(transform.position, playerShip.transform.position) <= detectionRange; }
+    public bool IsPlayerNearby() { return Vector3.Distance(transform.position, playerShip.transform.position) <= detectionRange; }
     //Used to shoot
     bool IsPlayerInRange()
     {
@@ -61,6 +60,10 @@ public class ConfuserController : MonoBehaviour
     {
         //move towards player
         float moveAmountThisFrame = moveSpeed;
+        //invert movement if player is behind
+        if (Vector3.Dot(transform.forward, playerShip.transform.position - transform.position) < 0f)
+            moveAmountThisFrame *= -1;
+        //apply the force
         Vector3 moveDirection = transform.forward * moveAmountThisFrame;
         rb.AddForce(moveDirection);
     }
@@ -69,6 +72,10 @@ public class ConfuserController : MonoBehaviour
     {
         //direct rotation of ship instead of force
         float turnAmountThisFrame = turnSpeed;
+        //invert rotation depending on which side player is on
+        if (Vector3.Dot(transform.right, playerShip.transform.position - transform.position) < 0f)
+            turnAmountThisFrame *= -1;
+        //do the rotation
         Quaternion turnOffset = Quaternion.Euler(0, turnAmountThisFrame, 0);
         rb.MoveRotation(rb.rotation * turnOffset);
     }

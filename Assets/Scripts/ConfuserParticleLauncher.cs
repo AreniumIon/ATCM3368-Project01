@@ -15,7 +15,7 @@ public class ConfuserParticleLauncher : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetAxisRaw("Vertical") != 0f)
+        if (GetComponentInParent<ConfuserController>().IsPlayerNearby())
         {
             if (Random.Range(0, 100) <= particlePercentChance)
                 particleLauncher.Emit(1);

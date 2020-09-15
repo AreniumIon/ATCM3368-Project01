@@ -17,14 +17,13 @@ public static class DelayHelper
         action();
     }
 
-    //same as above but when PlayerShip needs to be passed through
-    //TODO: convert this to be more general (like with MonoBehaviour)
-    public static Coroutine DelayAction(this MonoBehaviour monobehaviour, Action<PlayerShip> action, PlayerShip parameter, float delayDuration)
+    //same as above but when parameter needs to be passed through
+    public static Coroutine DelayAction<T>(this MonoBehaviour monobehaviour, Action<T> action, T parameter, float delayDuration)
     {
         return monobehaviour.StartCoroutine(DelayActionRoutine(action, parameter, delayDuration));
     }
 
-    private static IEnumerator DelayActionRoutine(Action<PlayerShip> action, PlayerShip parameter, float delayDuration)
+    private static IEnumerator DelayActionRoutine<T>(Action<T> action, T parameter, float delayDuration)
     {
         yield return new WaitForSeconds(delayDuration);
         action(parameter);

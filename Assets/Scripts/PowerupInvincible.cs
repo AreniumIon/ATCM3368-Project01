@@ -13,10 +13,10 @@ public class PowerupInvincible : Powerup
         {
             // powerup player and keep track of duplicate powerups
             playerShip.invinciblePowerupActive = true;
-            // visuals
-            playerShip.SetInvincibleMaterial(true);
             //particles and audio
             playerShip.PlayInvincibleStartEffect();
+            // visuals
+            playerShip.SetInvincibleMaterial(true);
         }
     }
 
@@ -24,12 +24,12 @@ public class PowerupInvincible : Powerup
     protected override void DeactivatePowerup(PlayerShip playerShip)
     {
         RemoveDuplicateEffects(playerShip);
-        // visuals
-        playerShip?.SetInvincibleMaterial(false);
         // powerdown and keep track of duplicate powerups
         playerShip.invinciblePowerupActive = false;
         //audio
         playerShip.PlayInvincibleEndEffect();
+        // visuals
+        playerShip?.SetInvincibleMaterial(false);
     }
 
     //searches for duplicate invincible powerups to remove its effects

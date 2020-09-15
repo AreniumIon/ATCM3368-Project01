@@ -4846,8 +4846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e4c9e54465da1b44bc18f0eb905d084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  turnSpeed: 1
+  moveSpeed: 2
+  turnSpeed: 0.4
   detectionRange: 40
   projectileReloadTime: 3
   distanceToFire: 30
@@ -4855,7 +4855,6 @@ MonoBehaviour:
     type: 3}
   projectileFireSound: {fileID: 8300000, guid: b2452e76b3592654085bba92c6b9ec84, type: 3}
   projectileSpawnPoint: {fileID: 8149873484279591406}
-  art: {fileID: 2691662363769603199}
   layerMask:
     serializedVersion: 2
     m_Bits: 256

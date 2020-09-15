@@ -31,6 +31,7 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] ParticleSystem confusedParticle = null;
     [SerializeField] AudioClip confusedStartSound = null;
     [SerializeField] AudioClip confusedEndSound = null;
+    [SerializeField] Material cockpitConfusedMaterial = null;
 
     [Header("Confused Variables")]
     [SerializeField] float confuseForceMax = .5f;
@@ -39,14 +40,11 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] float confuseRotationMin = .3f;
     float confuseForce = 0f;
     float confuseRotation = 0f;
-    int confusedCounter = 0;
-    bool isConfuserScheduled = false; //confused variables change every _ amount of time
+    bool isConfused = false;
     [SerializeField] float confusedChangeTime = 1f; //how often the confused amount changes
 
     //Other variables
     Rigidbody rb = null;
-    [SerializeField] GameObject art = null;
-    [SerializeField] GameObject particles = null;
 
     private void Awake()
     {
@@ -71,7 +69,7 @@ public class PlayerShip : MonoBehaviour
     {
         float vInput = Input.GetAxisRaw("Vertical");
         //apply confusion force
-        if (confusedCounter > 0)
+        if (isConfused)
             vInput += confuseForce;
         //apply input as force to ship
         float moveAmountThisFrame = vInput * moveSpeed;
@@ -84,7 +82,7 @@ public class PlayerShip : MonoBehaviour
     {
         float hInput = Input.GetAxisRaw("Horizontal");
         //apply confusion force
-        if (confusedCounter > 0)
+        if (isConfused)
             hInput += confuseRotation;
         //direct rotation of ship instead of force
         float turnAmountThisFrame = hInput * turnSpeed;
@@ -157,6 +155,8 @@ public class PlayerShip : MonoBehaviour
         invincibleParticle.Play();
         //sound
         AudioHelper.PlayClip2D(invincibleStartSound, .2f);
+        //remove confusion
+        DeactivateConfused();
     }
 
     public void PlayInvincibleEndEffect()
@@ -173,13 +173,33 @@ public class PlayerShip : MonoBehaviour
     //CONFUSED EFFECT
     public void ActivateConfused(float duration)
     {
-        confusedCounter++;
-        DelayHelper.DelayAction(this, DeactivateConfused, duration);
+        //only activate confused effects if not already confused (prevents getting overwhelmed)
+        if (!isConfused && !invinciblePowerupActive)
+        {
+            isConfused = true;
+            //delay deactivation
+            DelayHelper.DelayAction(this, DeactivateConfused, duration);
+            //particles
+            confusedParticle.Play();
+            //sound
+            AudioHelper.PlayClip2D(confusedStartSound, .2f);
+            //cockpit turns red
+            transform.GetChild(0).GetComponentsInChildren<MeshRenderer>()[7].material = cockpitConfusedMaterial;
+        }
     }
 
     void DeactivateConfused()
     {
-        confusedCounter--;
+        if (isConfused)
+        {
+            isConfused = false;
+            //particles
+            confusedParticle.Stop();
+            //sound
+            AudioHelper.PlayClip2D(confusedEndSound, .2f);
+            //cockpit back to normal
+            transform.GetChild(0).GetComponentsInChildren<MeshRenderer>()[7].material = cockpitMaterial;
+        }
     }
 
     //calculate confused effect every interval
