@@ -15,6 +15,9 @@ public class GameInput : MonoBehaviour
 
     void ReloadLevel()
     {
+        //prevent time freeze
+        Time.timeScale = 1f;
+        //reload scene
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(activeSceneIndex);
     }
