@@ -184,6 +184,7 @@ public class PlayerShip : MonoBehaviour
             //sound
             AudioHelper.PlayClip2D(confusedStartSound, .2f);
             //cockpit turns red
+            //'7': Cockpit ID
             transform.GetChild(0).GetComponentsInChildren<MeshRenderer>()[7].material = cockpitConfusedMaterial;
         }
     }
@@ -198,6 +199,7 @@ public class PlayerShip : MonoBehaviour
             //sound
             AudioHelper.PlayClip2D(confusedEndSound, .2f);
             //cockpit back to normal
+            //'7': Cockpit ID
             transform.GetChild(0).GetComponentsInChildren<MeshRenderer>()[7].material = cockpitMaterial;
         }
     }

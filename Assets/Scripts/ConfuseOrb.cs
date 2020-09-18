@@ -17,10 +17,6 @@ public class ConfuseOrb : MonoBehaviour
 
     public void Start()
     {
-        /*
-        rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * velocity;
-        */
         velocityVector = Vector3.forward * velocity;
         DelayHelper.DelayAction(this, Despawn, lifespan);
     }
@@ -48,7 +44,7 @@ public class ConfuseOrb : MonoBehaviour
     {
         //visuals
         art.SetActive(false);
-        //have to do an extra line to disable particles bc unity wants me to
+        //disable more particles spawning
         ParticleSystem.EmissionModule emission = particles.emission;
         emission.rateOverTime = 0f;
         //disable collider

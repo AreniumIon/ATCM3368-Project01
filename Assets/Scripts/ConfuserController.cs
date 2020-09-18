@@ -44,9 +44,12 @@ public class ConfuserController : MonoBehaviour
         }
     }
     
-    //Used to toggle movement
-    public bool IsPlayerNearby() { return Vector3.Distance(transform.position, playerShip.transform.position) <= detectionRange; }
-    //Used to shoot
+    //Decides if ship should move
+    public bool IsPlayerNearby()
+    {
+        return Vector3.Distance(transform.position, playerShip.transform.position) <= detectionRange;
+    }
+    //Decides if ship should shoot
     bool IsPlayerInRange()
     {
         RaycastHit hit;
@@ -58,26 +61,29 @@ public class ConfuserController : MonoBehaviour
     //MOVEMENT
     void MoveShip()
     {
-        //move towards player
-        float moveAmountThisFrame = moveSpeed;
-        //invert movement if player is behind
-        if (Vector3.Dot(transform.forward, playerShip.transform.position - transform.position) < 0f)
-            moveAmountThisFrame *= -1;
-        //apply the force
+        //calculate force
+        float moveAmountThisFrame = GetDot(moveSpeed, transform.forward);
         Vector3 moveDirection = transform.forward * moveAmountThisFrame;
+        //apply force
         rb.AddForce(moveDirection);
     }
 
     void TurnShip()
     {
-        //direct rotation of ship instead of force
-        float turnAmountThisFrame = turnSpeed;
-        //invert rotation depending on which side player is on
-        if (Vector3.Dot(transform.right, playerShip.transform.position - transform.position) < 0f)
-            turnAmountThisFrame *= -1;
-        //do the rotation
+        //calculate rotation
+        float turnAmountThisFrame = GetDot(turnSpeed, transform.right);
         Quaternion turnOffset = Quaternion.Euler(0, turnAmountThisFrame, 0);
+        //apply rotation
         rb.MoveRotation(rb.rotation * turnOffset);
+    }
+
+    //used for MoveShip() and TurnShip()
+    float GetDot(float variableSpeed, Vector3 baseDirection)
+    {
+        //invert result depending on which side its on
+        if (Vector3.Dot(baseDirection, playerShip.transform.position - transform.position) < 0f)
+            variableSpeed *= -1;
+        return variableSpeed;
     }
 
     //DYING
@@ -89,8 +95,11 @@ public class ConfuserController : MonoBehaviour
     //FIRE PROJECTILE
     void Shoot()
     {
+        //create projectile
         Instantiate(confuseProjectile, projectileSpawnPoint.position, transform.rotation, projectileParent);
+        //play projectile effects
         PlayShootFeedback();
+        //prevents from shooting again until DelayAction marks the ship as reloaded
         canFire = false;
         DelayHelper.DelayAction(this, ReadyToFire, projectileReloadTime);
     }
