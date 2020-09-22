@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] GameObject text = null;
+    [SerializeField] GameObject winText = null;
+    [SerializeField] AudioClip winSound = null;
 
     public void Win()
     {
-        text.SetActive(true);
+        AudioHelper.PlayClip2D(winSound, .5f);
+        winText.SetActive(true);
         Time.timeScale = 0f;
     }
 }

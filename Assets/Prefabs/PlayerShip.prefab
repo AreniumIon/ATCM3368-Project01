@@ -15289,6 +15289,9 @@ MonoBehaviour:
   confuseRotationMax: 1
   confuseRotationMin: 0.3
   confusedChangeTime: 1
+  deathSound: {fileID: 8300000, guid: fd81e0aa3bc4b634aa7e60939bea3cc9, type: 3}
+  deathParticle: {fileID: 3876387451484413105, guid: f913643a29c545f48a3aedc80fb98972,
+    type: 3}
 --- !u!1 &6049578311014526214
 GameObject:
   m_ObjectHideFlags: 0

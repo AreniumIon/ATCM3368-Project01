@@ -43,8 +43,11 @@ public class PlayerShip : MonoBehaviour
     bool isConfused = false;
     [SerializeField] float confusedChangeTime = 1f; //how often the confused amount changes
 
-    //Other variables
+    [Header("Other Variables")]
     Rigidbody rb = null;
+    [SerializeField] AudioClip deathSound = null;
+    [SerializeField] GameObject deathParticle = null;
+    [SerializeField] GameObject loseText = null;
 
     private void Awake()
     {
@@ -93,6 +96,13 @@ public class PlayerShip : MonoBehaviour
     //DYING/RESPAWNING
     public void Kill()
     {
+        //audio
+        AudioHelper.PlayClip2D(deathSound, .2f);
+        //text
+        loseText.SetActive(true);
+        //visual
+        GameObject newDeathParticle = Instantiate(deathParticle, transform.position, Quaternion.identity);
+        newDeathParticle.GetComponent<ParticleSystem>().Play();
         this.gameObject.SetActive(false);
     }
 

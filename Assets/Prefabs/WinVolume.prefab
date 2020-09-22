@@ -106,3 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a3304a49f7b1245ab2f554621a286a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  winSound: {fileID: 8300000, guid: 8e85cb2c81e56b64d9af023b8e533e3a, type: 3}
